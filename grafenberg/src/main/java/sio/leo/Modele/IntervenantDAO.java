@@ -1,7 +1,12 @@
 package sio.leo.Modele;
 
 public class IntervenantDAO {
-    public static void main(String[] args) {
-        System.out.println("Hello world!");
+    private ConnexionDAO connexionDAO; 
+
+     public IntervenantDAO() 
+    {
+        this.connexionDAO = new ConnexionDAO(); 
     }
+
+    
 }
