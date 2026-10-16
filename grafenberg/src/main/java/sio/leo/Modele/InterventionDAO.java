@@ -19,7 +19,7 @@ public class InterventionDAO {
     public double getCoutHeure(String cat) 
     {
         double cout = 0.0; 
-        String query = "SELECT CAT_COUTHORAIRE FROM CATEGORIE_PERSONNEL WHERE CAT_CODE = ?"
+        String query = "SELECT CAT_COUTHORAIRE FROM CATEGORIE_PERSONNEL WHERE CAT_CODE = ?";
             try (Connection conn = connexionDAO.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(query)) {
 

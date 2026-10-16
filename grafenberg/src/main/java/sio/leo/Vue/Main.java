@@ -7,5 +7,6 @@ public class Main {
         InterventionDAO dao = new InterventionDAO();
         double cout = dao.getCoutHeure("A");
         System.out.println("Le cout horaire de la categorie A est : " + cout + " €");
+        System.out.println("test");
     }
 }
