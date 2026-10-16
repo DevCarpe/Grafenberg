@@ -9,15 +9,27 @@ public class Intervention {
     private Date date ;
     private double duree;
     private boolean nuit;
+    private TypeOperation typeOperation;
 
     
-    public Intervention(int numero, Date date, double duree, boolean nuit) {
+    public Intervention(ArrayList<Intervenant> intervenants, int numero, Date date, boolean nuit,
+            TypeOperation typeOperation) {
+        Intervenants = intervenants;
         this.numero = numero;
         this.date = date;
-        this.duree = duree;
         this.nuit = nuit;
+        this.typeOperation = typeOperation;
     }
 
+
+    public TypeOperation getTypeOperation() {
+        return typeOperation;
+    }
+
+
+    public void setTypeOperation(TypeOperation typeOperation) {
+        this.typeOperation = typeOperation;
+    }
 
     public ArrayList<Intervenant> getIntervenants() {
         return Intervenants;
