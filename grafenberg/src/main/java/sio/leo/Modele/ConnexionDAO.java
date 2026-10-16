@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class ConnexionDAO {
     
-    private final String URL = "jdbc:mysql://";
+    private final String URL = "jdbc:mysql://192.168.5.120/GRAFENBERG02";
     private final String USER = "root";
     private final String PWD="";
 
