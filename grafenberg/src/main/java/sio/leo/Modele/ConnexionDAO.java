@@ -12,7 +12,9 @@ public class ConnexionDAO {
     private final String USER = "nour";
     private final String PWD="pwnour";
 
-    public ConnexionDAO(){}
+    public ConnexionDAO(){
+
+    }
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PWD);
