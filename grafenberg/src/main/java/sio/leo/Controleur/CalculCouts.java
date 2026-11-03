@@ -50,14 +50,14 @@ public class CalculCouts {
     public static double calculerCoutMainDoeuvre(Intervention intervention, List<Intervenant> intervenants) {
         double totalMainDoeuvre = 0.0;
         double duree = intervention.getDuree();
-        boolean estNuit = "OUI".equalsIgnoreCase(intervention.getNuit());
+        boolean estNuit = intervention.isNuit();
         Date dateOp = intervention.getDate();
 
         boolean majorationWEFerie = estWeekend(dateOp) || estJourFerie(dateOp);
         boolean majorationNuitSeule = estNuit && !majorationWEFerie;
 
         for (Intervenant intervenant : intervenants) {
-            double tauxHoraire = intervenant.getCoutHoraire();
+            double tauxHoraire = intervenant.getCategorie().getCoutHoraire();
 
             if (majorationWEFerie) {
                 tauxHoraire = tauxHoraire * 3.0;
