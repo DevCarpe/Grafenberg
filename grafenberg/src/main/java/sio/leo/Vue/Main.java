@@ -1,5 +1,15 @@
 package sio.leo.Vue;
 
+<<<<<<< HEAD
+import sio.leo.Modele.InterventionDAO;
+
+public class Main {
+    public static void main(String[] args) {
+        InterventionDAO dao = new InterventionDAO();
+        double cout = dao.getCoutHeure("A");
+        System.out.println("Le cout horaire de la categorie A est : " + cout + " €");
+        System.out.println("test");
+=======
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -28,5 +38,6 @@ public class Main {
             System.err.println("Erreur de connexion : " + e.getMessage());
             e.printStackTrace();
         }
+>>>>>>> fc11c828ce7ba9228e777b18e740a544d8c7f743
     }
 }
