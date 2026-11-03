@@ -57,7 +57,7 @@ public class CalculCouts {
         boolean majorationNuitSeule = estNuit && !majorationWEFerie;
 
         for (Intervenant intervenant : intervenants) {
-            double tauxHoraire = intervenant.getCoutHoraire();
+            double tauxHoraire = intervenant.getCategorie().getCoutHoraire();
 
             if (majorationWEFerie) {
                 tauxHoraire = tauxHoraire * 3.0;
