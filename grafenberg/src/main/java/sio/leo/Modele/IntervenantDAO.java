@@ -7,79 +7,66 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class IntervenantDAO {
-    private ConnexionDAO connexionDAO; 
+    private ConnexionDAO connexionDAO;
 
-     public IntervenantDAO() 
-    {
-        this.connexionDAO = new ConnexionDAO(); 
+    public IntervenantDAO() {
+        this.connexionDAO = new ConnexionDAO();
     }
 
-    public Intervenant getIntervenant(int matricule){
-            Intervenant intervenant = null;
-            String query = "SELECT p.*, c.CAT_COUT_HORAIRE FROM PERSONNEL p  INNER JOIN CATEGORIE c ON p.CAT_CODE =c.CAT_CODE WHERE PER_MATRICULE = ?";
-            try (Connection conn = connexionDAO.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1 , matricule);
-            ResultSet rs = pstmt.executeQuery();
-            
-
-                if(rs.next()){
-
-                int catCode = Integer.parseInt(rs.getString("CAT_CODE"));
-                double coutHoraire = rs.getDouble("CAT_COUT_HORAIRE");
-                Categorie categorie = new Categorie(catCode, coutHoraire); 
-
-                intervenant = new Intervenant(
-                Integer.parseInt(rs.getString("PER_MATRICULE")),          
-                rs.getString("CAT_NOM"),     
-                categorie    
-                );
-                return intervenant;
-            
-            }
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return intervenant;     
-    }
-
-     public ArrayList<Intervenant> getIntervenantsParIntervention(int idIntervention) {
-        ArrayList<Intervenant> lesIntervenants = new ArrayList<>();
-        
-        
-        String query = "SELECT p.*, c.CAT_COUT_HORAIRE " +
-                       "FROM PERSONNEL p " +
-                       "INNER JOIN CATEGORIE c ON p.CAT_CODE = c.CAT_CODE " +
-                       "INNER JOIN INTERVENIR i ON p.PER_MATRICULE = i.PER_MATRICULE " +
-                       "WHERE i.INT_ID = ?";
-
+    // Retourne un intervenant par son matricule (null si introuvable)
+    public Intervenant getIntervenant(int matricule) {
+        Intervenant intervenant = null;
+        String query = "SELECT p.PER_MATRICULE, p.PER_NOM, p.CAT_CODE, c.CAT_COUTHORAIRE "+ "FROM PERSONNEL p "+ "INNER JOIN CATEGORIE_PERSONNEL c ON p.CAT_CODE = c.CAT_CODE "+ "WHERE p.PER_MATRICULE = ?";
         try (Connection conn = connexionDAO.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-           
-            pstmt.setInt(1, idIntervention);
+            // PER_MATRICULE est un CHAR(32) : on le passe en String
+            pstmt.setString(1, String.valueOf(matricule));
 
             try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    int catCode = Integer.parseInt(rs.getString("CAT_CODE"));
-                    double coutHoraire = rs.getDouble("CAT_COUT_HORAIRE");
-                    Categorie categorie = new Categorie(catCode, coutHoraire);
-
-                    Intervenant intervenant = new Intervenant(
-                        Integer.parseInt(rs.getString("PER_MATRICULE")),
-                        rs.getString("PER_NOM"),
-                        categorie
-                    );
-
-                    lesIntervenants.add(intervenant);
+                if (rs.next()) {
+                    intervenant = creerIntervenant(rs);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+        return intervenant;
+    }
+
+    // Retourne les intervenants d'une intervention
+    public ArrayList<Intervenant> getIntervenantsParIntervention(int numIntervention) {
+        ArrayList<Intervenant> lesIntervenants = new ArrayList<Intervenant>();
+        String query = "SELECT p.PER_MATRICULE, p.PER_NOM, p.CAT_CODE, c.CAT_COUTHORAIRE "
+                     + "FROM PERSONNEL p "
+                     + "INNER JOIN CATEGORIE_PERSONNEL c ON p.CAT_CODE = c.CAT_CODE "
+                     + "INNER JOIN INTERV_PERSONNEL i ON p.PER_MATRICULE = i.PER_MATRICULE "
+                     + "WHERE i.INT_NUMERO = ?";
+        try (Connection conn = connexionDAO.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, numIntervention);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    lesIntervenants.add(creerIntervenant(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return lesIntervenants;
     }
-    
+
+    // Construit un Intervenant avec sa Categorie à partir de la ligne courante
+    private Intervenant creerIntervenant(ResultSet rs) throws SQLException {
+        Categorie categorie = new Categorie(
+                rs.getString("CAT_CODE"),
+                rs.getDouble("CAT_COUTHORAIRE"));
+
+        return new Intervenant(
+                Integer.parseInt(rs.getString("PER_MATRICULE").trim()),
+                rs.getString("PER_NOM"),
+                categorie);
+    }
 }
