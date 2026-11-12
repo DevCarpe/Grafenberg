@@ -99,6 +99,7 @@ public class InterventionDAO {
                 || v.equals("oui") || v.equals("vrai");
     }
 
+    //nuit stockée dans un String dans la BD et un double dans la classe donc conversion 
     private double convertirDuree(String valeur) {
         if (valeur == null || valeur.trim().isEmpty()) {
             return 0.0;

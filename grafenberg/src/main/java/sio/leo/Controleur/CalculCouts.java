@@ -2,6 +2,7 @@ package sio.leo.Controleur;
 
 import sio.leo.Modele.Intervenant;
 import sio.leo.Modele.Intervention;
+import sio.leo.Modele.TypeOperation;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -71,8 +72,18 @@ public class CalculCouts {
         return totalMainDoeuvre;
     }
 
-    public static double calculerCoutDeRevient(Intervention intervention, List<Intervenant> intervenants, double chargesOperation, double chargesBloc) {
-        double coutMO = calculerCoutMainDoeuvre(intervention, intervenants);
+    public static double calculerCoutDeRevient(Intervention intervention) {
+        double chargesOperation = 0.0;
+        double chargesBloc = 0.0;
+
+        TypeOperation type = intervention.getTypeOperation();
+        if (type != null) {
+            chargesOperation = type.getCharges();
+            if (type.getBloc() != null) {
+                chargesBloc = type.getBloc().getCharges();
+            }
+        }
+        double coutMO = calculerCoutMainDoeuvre(intervention, intervention.getIntervenants());
         return coutMO + chargesOperation + chargesBloc;
     }
 }
