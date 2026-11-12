@@ -2,9 +2,12 @@ package sio.leo.Vue;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
+
 
 import sio.leo.Controleur.CalculCouts;
 import sio.leo.Controleur.IntervenantControleur;
@@ -46,6 +49,9 @@ public class Main {
                 case 4:
                     listerIntervenantsParIntervention();
                     break;
+                case 5:
+                    ajouterIntervention();
+                    break;
                 case 0:
                     System.out.println("Au revoir !");
                     break;
@@ -81,6 +87,7 @@ public class Main {
         System.out.println("2. Lister les intervenants");
         System.out.println("3. Calculer le coût de revient d'une intervention");
         System.out.println("4. Lister les intervenants d'une intervention");
+        System.out.println("5. Ajouter une intervention");
         System.out.println("0. Quitter");
         System.out.println("======================");
     }
@@ -144,7 +151,8 @@ public class Main {
         }
 
         double cout = CalculCouts.calculerCoutDeRevient(intervention);
-        System.out.printf("Coût de revient de l'intervention %d : %.2f €%n", numero, cout);
+        // .2f --> nombre flottant a deux chiffres après la virgule
+        System.out.printf("Coût de revient de l'intervention %d : %.2f euros%n", numero, cout);
     }
 
     // Relit tant que la saisie n'est pas un entier valide
@@ -159,4 +167,47 @@ public class Main {
             }
         }
     }
+
+    private static void ajouterIntervention() {
+    System.out.println();
+    System.out.println("--- Nouvelle intervention ---");
+
+    try {
+        System.out.print("Date (jj/mm/aaaa) : ");
+        //SimpleDateFormat sert à faire le pont entre un texte au format particulier et un objet Date
+        //trim pour supprimer les espaces en trop
+        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.nextLine().trim());
+
+        System.out.print("Durée en heures : ");
+        double duree = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
+
+        System.out.print("Intervention de nuit (o/n) : ");
+        boolean nuit = scanner.nextLine().trim().equalsIgnoreCase("o");
+
+        System.out.print("Code du type d'opération : ");
+        int codeType = Integer.parseInt(scanner.nextLine().trim());
+
+        ArrayList<Integer> matricules = new ArrayList<Integer>();
+
+        // -1 pour éviter toute possibilité de correspondre à un intervenant
+        System.out.println("Matricules des intervenants (-1 pour terminer) :");
+        while (true) {
+            System.out.print("  Matricule : ");
+            int matricule = Integer.parseInt(scanner.nextLine().trim());
+            if (matricule == -1) {
+                break;
+            }
+            matricules.add(matricule);
+        }
+
+        int numero = interventionControleur.ajouterIntervention(date, duree, nuit, codeType, matricules);
+        if (numero < 0) {
+            System.out.println("Échec de l'ajout de l'intervention.");
+        } else {
+            System.out.println("Intervention " + numero + " ajoutée avec succès.");
+        }
+    } catch (ParseException e) {
+        System.out.println("Date invalide.");
+    }
+}
 }
