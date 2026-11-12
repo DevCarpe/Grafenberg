@@ -89,9 +89,30 @@ public class InterventionDAO {
         return intervention;
     }
 
+    //nuit stockée dans un String dans la BD et boolen dans la classe donc conversion 
+    private boolean convertirNuit(String valeur) {
+        if (valeur == null) {
+            return false;
+        }
+        String v = valeur.trim().toLowerCase();
+        return v.equals("1") || v.equals("true") || v.equals("o")
+                || v.equals("oui") || v.equals("vrai");
+    }
+
+    private double convertirDuree(String valeur) {
+        if (valeur == null || valeur.trim().isEmpty()) {
+            return 0.0;
+        }
+        try {
+            return Double.parseDouble(valeur.trim().replace(',', '.'));
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+
 }
 
 
 
-}
+
 
