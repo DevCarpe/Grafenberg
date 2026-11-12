@@ -69,4 +69,23 @@ public class IntervenantDAO {
                 rs.getString("PER_NOM"),
                 categorie);
     }
+
+    public ArrayList<Intervenant> getLesIntervenants() {
+        ArrayList<Intervenant> lesIntervenants = new ArrayList<Intervenant>();
+        String query = "SELECT p.PER_MATRICULE, p.PER_NOM, p.CAT_CODE, c.CAT_COUTHORAIRE "
+                    + "FROM PERSONNEL p "
+                    + "INNER JOIN CATEGORIE_PERSONNEL c ON p.CAT_CODE = c.CAT_CODE "
+                    + "ORDER BY p.PER_NOM";
+        try (Connection conn = connexionDAO.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                lesIntervenants.add(creerIntervenant(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lesIntervenants;
+    }
 }

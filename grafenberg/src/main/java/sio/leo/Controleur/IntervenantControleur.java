@@ -15,4 +15,8 @@ public class IntervenantControleur {
     public ArrayList<Intervenant> listerIntervenants(int idIntervention) {
         return this.intervenantDAO.getIntervenantsParIntervention(idIntervention);
     }
+
+    public ArrayList<Intervenant> listerTousLesIntervenants() {
+    return this.intervenantDAO.getLesIntervenants();
+}
 }
