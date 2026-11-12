@@ -110,9 +110,61 @@ public class InterventionDAO {
             return 0.0;
         }
     }
+// Retourne le prochain numéro d'intervention disponible (MAX + 1)
+public int getProchainNumero() {
+    int numero = 1;
+    String query = "SELECT COALESCE(MAX(INT_NUMERO), 0) + 1 FROM INTERVENTION";
+    try (Connection conn = connexionDAO.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query);
+         ResultSet rs = pstmt.executeQuery()) {
 
-    
+        if (rs.next()) {
+            numero = rs.getInt(1);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return numero;
+}
 
+// Insère une intervention et ses intervenants. Retourne true si tout a réussi.
+public boolean insererIntervention(Intervention intervention) {
+    String queryIntervention = "INSERT INTO INTERVENTION (INT_NUMERO, TOP_CODE, INT_DATE, INT_NUIT, INT_DUREE) "
+                             + "VALUES (?, ?, ?, ?, ?)";
+    String queryIntervenant = "INSERT INTO INTERV_PERSONNEL (PER_MATRICULE, INT_NUMERO) VALUES (?, ?)";
+
+    try (Connection conn = connexionDAO.getConnection()) {
+        conn.setAutoCommit(false); // transaction : tout ou rien
+        try {
+            try (PreparedStatement pstmt = conn.prepareStatement(queryIntervention)) {
+                pstmt.setInt(1, intervention.getNumero());
+                pstmt.setInt(2, intervention.getTypeOperation().getCode());
+                pstmt.setDate(3, new java.sql.Date(intervention.getDate().getTime()));
+                pstmt.setString(4, intervention.isNuit() ? "1" : "0");
+                pstmt.setString(5, String.valueOf(intervention.getDuree()));
+                pstmt.executeUpdate();
+            }
+
+            try (PreparedStatement pstmt = conn.prepareStatement(queryIntervenant)) {
+                for (Intervenant intervenant : intervention.getIntervenants()) {
+                    pstmt.setString(1, String.valueOf(intervenant.getMatricule()));
+                    pstmt.setInt(2, intervention.getNumero());
+                    pstmt.executeUpdate();
+                }
+            }
+
+            conn.commit();
+            return true;
+        } catch (SQLException e) {
+            conn.rollback();
+            e.printStackTrace();
+            return false;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }
 
 
