@@ -5,6 +5,15 @@ public class TypeOperation {
     private int charges;
     private Bloc bloc;
     
+    public TypeOperation(){
+
+    }
+    public TypeOperation(int p_code, int p_charges, Bloc p_bloc){
+        this.code = p_code;
+        this.charges = p_charges;
+        this.bloc = p_bloc;
+    }
+
     public int getCode() {
         return code;
     }
