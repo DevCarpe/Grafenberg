@@ -7,7 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 
 import sio.leo.Controleur.CalculCouts;
 import sio.leo.Controleur.IntervenantControleur;
@@ -52,6 +53,9 @@ public class Main {
                 case 5:
                     ajouterIntervention();
                     break;
+                case 6:
+                    genererEtatPdf();
+                    break;
                 case 0:
                     System.out.println("Au revoir !");
                     break;
@@ -88,6 +92,7 @@ public class Main {
         System.out.println("3. Calculer le coût de revient d'une intervention");
         System.out.println("4. Lister les intervenants d'une intervention");
         System.out.println("5. Ajouter une intervention");
+        System.out.println("6. Générer l'état récapitulatif PDF");
         System.out.println("0. Quitter");
         System.out.println("======================");
     }
@@ -101,11 +106,6 @@ public class Main {
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         System.out.println();
-        //print f permet de définir un format puis des arguments lors de l'écriture d'uhn texte
-        // %s : string  
-        // le chiffre : largeur minimale
-        // le "-" l'alignement à gauche
-        // %n, le saut de ligne
         System.out.printf("%-8s %-12s %-8s %-8s%n", "N°", "Date", "Durée", "Nuit");
         System.out.println("------------------------------------");
         for (Intervention i : lesInterventions) {
@@ -124,9 +124,8 @@ public class Main {
         afficherIntervenants(intervenantControleur.listerIntervenants(numero));
     }
 
-    
-    private static void afficherIntervenants(ArrayList<Intervenant> lesIntervenants) {
-        if (lesIntervenants.isEmpty()) {
+private static void afficherIntervenants(ArrayList<Intervenant> lesIntervenants) {
+        if (lesIntervenants.isEmpty()) { // <-- C'est bien "lesIntervenants" ici
             System.out.println("Aucun intervenant trouvé.");
             return;
         }
@@ -151,7 +150,6 @@ public class Main {
         }
 
         double cout = CalculCouts.calculerCoutDeRevient(intervention);
-        // .2f --> nombre flottant a deux chiffres après la virgule
         System.out.printf("Coût de revient de l'intervention %d : %.2f euros%n", numero, cout);
     }
 
@@ -169,24 +167,43 @@ public class Main {
     }
 
     private static void ajouterIntervention() {
-    System.out.println();
-    System.out.println("--- Nouvelle intervention ---");
+        System.out.println();
+        System.out.println("--- Nouvelle intervention ---");
 
-    try {
-        System.out.print("Date (jj/mm/aaaa) : ");
-        //SimpleDateFormat sert à faire le pont entre un texte au format particulier et un objet Date
-        //trim pour supprimer les espaces en trop
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.nextLine().trim());
+        try {
+            System.out.print("Date (jj/mm/aaaa) : ");
+            Date date = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.nextLine().trim());
 
-        System.out.print("Durée en heures : ");
-        double duree = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
+            System.out.print("Durée en heures : ");
+            double duree = Double.parseDouble(scanner.nextLine().trim().replace(',', '.'));
 
-        System.out.print("Intervention de nuit (o/n) : ");
-        boolean nuit = scanner.nextLine().trim().equalsIgnoreCase("o");
+            System.out.print("Intervention de nuit (o/n) : ");
+            boolean nuit = scanner.nextLine().trim().equalsIgnoreCase("o");
 
-        System.out.print("Code du type d'opération : ");
-        int codeType = Integer.parseInt(scanner.nextLine().trim());
+            System.out.print("Code du type d'opération : ");
+            int codeType = Integer.parseInt(scanner.nextLine().trim());
 
+<<<<<<< HEAD
+            ArrayList<String> matricules = new ArrayList<String>();
+
+            System.out.println("Matricules des intervenants (Tapez 'FIN' pour terminer) :");
+            while (true) {
+                System.out.print("  Matricule : ");
+                String matricule = scanner.nextLine().trim();
+                if (matricule.equalsIgnoreCase("FIN")) {
+                    break;
+                }
+                if (!matricule.isEmpty()) {
+                    matricules.add(matricule);
+                }
+            }
+
+            int numero = interventionControleur.ajouterIntervention(date, duree, nuit, codeType, matricules);
+            if (numero < 0) {
+                System.out.println("Échec de l'ajout de l'intervention.");
+            } else {
+                System.out.println("Intervention " + numero + " ajoutée avec succès.");
+=======
         ArrayList<String> matricules = new ArrayList<String>();
 
         // écrire fin pour arreter d rentrer des matricules
@@ -196,18 +213,87 @@ public class Main {
             String matricule = scanner.nextLine().trim();
             if (matricule.equalsIgnoreCase("fin")) {
                 break;
+>>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
             }
-            matricules.add(matricule);
+        } catch (ParseException e) {
+            System.out.println("Date invalide.");
+        }
+    }
+
+    private static void genererEtatPdf() {
+        int numero = lireEntier("Numéro de l'intervention pour le PDF : ");
+        Intervention intervention = interventionControleur.getInterventionComplete(numero);
+
+        if (intervention == null) {
+            System.out.println("Aucune intervention trouvée avec le numéro " + numero + ".");
+            return;
         }
 
-        int numero = interventionControleur.ajouterIntervention(date, duree, nuit, codeType, matricules);
-        if (numero < 0) {
-            System.out.println("Échec de l'ajout de l'intervention.");
-        } else {
-            System.out.println("Intervention " + numero + " ajoutée avec succès.");
+        double coutTotal = CalculCouts.calculerCoutDeRevient(intervention);
+        String nomFichier = "intervention_" + numero + ".pdf";
+
+        try (org.apache.pdfbox.pdmodel.PDDocument document = new org.apache.pdfbox.pdmodel.PDDocument()) {
+            org.apache.pdfbox.pdmodel.PDPage page = new org.apache.pdfbox.pdmodel.PDPage();
+            document.addPage(page);
+
+            try (org.apache.pdfbox.pdmodel.PDPageContentStream contentStream = new org.apache.pdfbox.pdmodel.PDPageContentStream(document, page)) {
+                contentStream.beginText();
+                // Utilisation de PDFBox 3.x pour la police en gras
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 18);
+                contentStream.setLeading(22.0f);
+                contentStream.newLineAtOffset(50, 750);
+
+                // Titre
+                contentStream.showText("ETAT RECAPITULATIF - INTERVENTION N° " + intervention.getNumero());
+                contentStream.newLine();
+                contentStream.newLine();
+
+                // Informations générales (Police normale)
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String dateStr = (intervention.getDate() != null) ? format.format(intervention.getDate()) : "-";
+                
+                contentStream.showText("Date : " + dateStr);
+                contentStream.newLine();
+                contentStream.showText("Durée : " + intervention.getDuree() + " heures");
+                contentStream.newLine();
+                contentStream.showText("Intervention de nuit : " + (intervention.isNuit() ? "Oui" : "Non"));
+                contentStream.newLine();
+                
+                if (intervention.getTypeOperation() != null) {
+                    contentStream.showText("Type d'opération : " + intervention.getTypeOperation().getCode());
+                    contentStream.newLine();
+                }
+
+                contentStream.newLine();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
+                contentStream.showText("Intervenants :");
+                contentStream.newLine();
+
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 12);
+                if (intervention.getIntervenants() != null && !intervention.getIntervenants().isEmpty()) {
+                    for (Intervenant inv : intervention.getIntervenants()) {
+                        contentStream.showText("- " + inv.getNom() + " (Matricule : " + inv.getMatricule() + ", Catégorie : " + inv.getCategorie().getCode() + ")");
+                        contentStream.newLine();
+                    }
+                } else {
+                    contentStream.showText("Aucun intervenant enregistré pour cette intervention.");
+                    contentStream.newLine();
+                }
+
+                contentStream.newLine();
+                contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 14);
+                contentStream.showText("Coût total de revient : " + String.format("%.2f", coutTotal) + " €");
+                
+                contentStream.endText();
+            }
+
+            document.save(nomFichier);
+            System.out.println("Succès : Le fichier PDF '" + nomFichier + "' a été généré avec succès dans le projet !");
+
+        } catch (java.io.IOException e) {
+            System.out.println("Erreur lors de la génération du PDF : " + e.getMessage());
+            e.printStackTrace();
         }
-    } catch (ParseException e) {
-        System.out.println("Date invalide.");
     }
-}
 }

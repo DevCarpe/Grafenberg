@@ -14,10 +14,18 @@
     </properties>
 
     <dependencies>
-         <dependency>
+        <!-- Connecteur MySQL -->
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.30</version>
+        </dependency>
+
+        <!-- Apache PDFBox pour générer les PDF -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.1</version>
         </dependency>
     </dependencies>
 

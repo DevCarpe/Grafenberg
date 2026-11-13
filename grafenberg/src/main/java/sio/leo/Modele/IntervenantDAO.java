@@ -16,11 +16,18 @@ public class IntervenantDAO {
     // Retourne un intervenant par son matricule (null si introuvable)
     public Intervenant getIntervenant(String matricule) {
         Intervenant intervenant = null;
-        String query = "SELECT p.PER_MATRICULE, p.PER_NOM, p.CAT_CODE, c.CAT_COUTHORAIRE "+ "FROM PERSONNEL p "+ "INNER JOIN CATEGORIE_PERSONNEL c ON p.CAT_CODE = c.CAT_CODE "+ "WHERE p.PER_MATRICULE = ?";
+        String query = "SELECT p.PER_MATRICULE, p.PER_NOM, p.CAT_CODE, c.CAT_COUTHORAIRE " + 
+                       "FROM PERSONNEL p " + 
+                       "INNER JOIN CATEGORIE_PERSONNEL c ON p.CAT_CODE = c.CAT_CODE " + 
+                       "WHERE p.PER_MATRICULE = ?";
         try (Connection conn = connexionDAO.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
+<<<<<<< HEAD
+            // PER_MATRICULE est un CHAR(32) : on le passe directement en String
+=======
             // PER_MATRICULE est un CHAR(32) : on le passe en String
+>>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
             pstmt.setString(1, matricule);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -65,7 +72,11 @@ public class IntervenantDAO {
                 rs.getDouble("CAT_COUTHORAIRE"));
 
         return new Intervenant(
+<<<<<<< HEAD
+                rs.getString("PER_MATRICULE").trim(), // Récupéré directement en String (plus de Integer.parseInt)
+=======
                 rs.getString("PER_MATRICULE").trim(),
+>>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
                 rs.getString("PER_NOM"),
                 categorie);
     }
@@ -77,8 +88,8 @@ public class IntervenantDAO {
                     + "INNER JOIN CATEGORIE_PERSONNEL c ON p.CAT_CODE = c.CAT_CODE "
                     + "ORDER BY p.PER_NOM";
         try (Connection conn = connexionDAO.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            ResultSet rs = pstmt.executeQuery()) {
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 lesIntervenants.add(creerIntervenant(rs));
