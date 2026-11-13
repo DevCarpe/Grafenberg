@@ -187,14 +187,14 @@ public class Main {
         System.out.print("Code du type d'opération : ");
         int codeType = Integer.parseInt(scanner.nextLine().trim());
 
-        ArrayList<Integer> matricules = new ArrayList<Integer>();
+        ArrayList<String> matricules = new ArrayList<String>();
 
-        // -1 pour éviter toute possibilité de correspondre à un intervenant
-        System.out.println("Matricules des intervenants (-1 pour terminer) :");
+        // écrire fin pour arreter d rentrer des matricules
+        System.out.println("Matricules des intervenants (fin pour terminer) :");
         while (true) {
             System.out.print("  Matricule : ");
-            int matricule = Integer.parseInt(scanner.nextLine().trim());
-            if (matricule == -1) {
+            String matricule = scanner.nextLine().trim();
+            if (matricule.equalsIgnoreCase("fin")) {
                 break;
             }
             matricules.add(matricule);

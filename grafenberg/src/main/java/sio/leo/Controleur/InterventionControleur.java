@@ -39,7 +39,7 @@ public class InterventionControleur {
 
 
 
-    public int ajouterIntervention(java.util.Date date, double duree, boolean nuit, int codeTypeOperation, ArrayList<Integer> matricules) {
+    public int ajouterIntervention(java.util.Date date, double duree, boolean nuit, int codeTypeOperation, ArrayList<String> matricules) {
         //gestion de certaines erreurs possibles
     if (date == null || duree <= 0 || matricules == null || matricules.isEmpty()) {
         return -1;
@@ -51,7 +51,7 @@ public class InterventionControleur {
     }
 
     ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();
-    for (int matricule : matricules) {
+    for (String matricule : matricules) {
         Intervenant intervenant = this.intervenantDAO.getIntervenant(matricule);
         if (intervenant == null) {
             return -1; // matricule inexistant
