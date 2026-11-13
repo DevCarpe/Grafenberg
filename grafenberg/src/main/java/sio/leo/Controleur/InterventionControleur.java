@@ -37,35 +37,30 @@ public class InterventionControleur {
         return intervention;
     }
 
-
-
-    public int ajouterIntervention(java.util.Date date, double duree, boolean nuit, int codeTypeOperation, ArrayList<Integer> matricules) {
-        //gestion de certaines erreurs possibles
-    if (date == null || duree <= 0 || matricules == null || matricules.isEmpty()) {
-        return -1;
-    }
-
-    TypeOperation type = this.typeOperationDAO.getTypeOperation(codeTypeOperation);
-    if (type == null) {
-        return -1; // type d'opération inexistant
-    }
-
-    ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();
-    for (int matricule : matricules) {
-        Intervenant intervenant = this.intervenantDAO.getIntervenant(matricule);
-        if (intervenant == null) {
-            return -1; // matricule inexistant
+    public int ajouterIntervention(java.util.Date date, double duree, boolean nuit, int codeTypeOperation, ArrayList<String> matricules) {
+        // gestion de certaines erreurs possibles
+        if (date == null || duree <= 0 || matricules == null || matricules.isEmpty()) {
+            return -1;
         }
-        intervenants.add(intervenant);
+
+        TypeOperation type = this.typeOperationDAO.getTypeOperation(codeTypeOperation);
+        if (type == null) {
+            return -1; // type d'opération inexistant
+        }
+
+        ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();
+        for (String matricule : matricules) {
+            Intervenant intervenant = this.intervenantDAO.getIntervenant(matricule);
+            if (intervenant == null) {
+                return -1; // matricule inexistant
+            }
+            intervenants.add(intervenant);
+        }
+
+        int numero = this.interventionDAO.getProchainNumero();
+        Intervention intervention = new Intervention(intervenants, numero, date, nuit, type);
+        intervention.setDuree(duree);
+
+        return this.interventionDAO.insererIntervention(intervention) ? numero : -1;
     }
-
-    int numero = this.interventionDAO.getProchainNumero();
-    Intervention intervention = new Intervention(intervenants, numero, date, nuit, type);
-    intervention.setDuree(duree);
-
-    return this.interventionDAO.insererIntervention(intervention) ? numero : -1;
-}
-
-    
-    
 }
