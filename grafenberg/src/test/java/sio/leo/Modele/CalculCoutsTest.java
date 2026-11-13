@@ -45,10 +45,10 @@ public class CalculCoutsTest {
         Categorie catC = new Categorie("C", 73);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
-        equipe.add(new Intervenant(38, "RIEUX", catB));
-        equipe.add(new Intervenant(40, "BARNARD", catA));
-        equipe.add(new Intervenant(26, "KNOCK", catC));
-        equipe.add(new Intervenant(30, "CABROL", catA));
+        equipe.add(new Intervenant("38", "RIEUX", catB));
+        equipe.add(new Intervenant("40", "BARNARD", catA));
+        equipe.add(new Intervenant("26", "KNOCK", catC));
+        equipe.add(new Intervenant("30", "CABROL", catA));
 
         Bloc bloc = new Bloc(1, 1524);
         TypeOperation type = new TypeOperation();
@@ -76,10 +76,10 @@ public class CalculCoutsTest {
         Categorie catC = new Categorie("C", 73);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
-        equipe.add(new Intervenant(26, "KNOCK", catC));
-        equipe.add(new Intervenant(40, "BARNARD", catA));
-        equipe.add(new Intervenant(30, "CABROL", catA));
-        equipe.add(new Intervenant(42, "HOUSE", catB));
+        equipe.add(new Intervenant("26", "KNOCK", catC));
+        equipe.add(new Intervenant("40", "BARNARD", catA));
+        equipe.add(new Intervenant("30", "CABROL", catA));
+        equipe.add(new Intervenant("42", "HOUSE", catB));
 
         Bloc bloc = new Bloc(1, 1524);
         TypeOperation type = new TypeOperation();
@@ -106,7 +106,7 @@ public class CalculCoutsTest {
         Categorie catA = new Categorie("A", 24);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
-        equipe.add(new Intervenant(3, "Personnel A03", catA));
+        equipe.add(new Intervenant("3", "Personnel A03", catA));
 
         Intervention inter = new Intervention(equipe, 3, Date.valueOf("2026-09-03"), true, null);
         inter.setDuree(8);
@@ -120,7 +120,7 @@ public class CalculCoutsTest {
         Categorie catB = new Categorie("B", 40);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
-        equipe.add(new Intervenant(1, "Personnel B01", catB));
+        equipe.add(new Intervenant("1", "Personnel B01", catB));
 
         Intervention inter = new Intervention(equipe, 50, Date.valueOf("2026-07-14"), false, null);
         inter.setDuree(1);
