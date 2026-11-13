@@ -23,11 +23,7 @@ public class IntervenantDAO {
         try (Connection conn = connexionDAO.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-<<<<<<< HEAD
             // PER_MATRICULE est un CHAR(32) : on le passe directement en String
-=======
-            // PER_MATRICULE est un CHAR(32) : on le passe en String
->>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
             pstmt.setString(1, matricule);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -72,11 +68,7 @@ public class IntervenantDAO {
                 rs.getDouble("CAT_COUTHORAIRE"));
 
         return new Intervenant(
-<<<<<<< HEAD
                 rs.getString("PER_MATRICULE").trim(), // Récupéré directement en String (plus de Integer.parseInt)
-=======
-                rs.getString("PER_MATRICULE").trim(),
->>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
                 rs.getString("PER_NOM"),
                 categorie);
     }

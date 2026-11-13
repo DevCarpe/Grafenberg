@@ -43,29 +43,9 @@ public class InterventionControleur {
             return -1;
         }
 
-<<<<<<< HEAD
         TypeOperation type = this.typeOperationDAO.getTypeOperation(codeTypeOperation);
         if (type == null) {
             return -1; // type d'opération inexistant
-=======
-
-    public int ajouterIntervention(java.util.Date date, double duree, boolean nuit, int codeTypeOperation, ArrayList<String> matricules) {
-        //gestion de certaines erreurs possibles
-    if (date == null || duree <= 0 || matricules == null || matricules.isEmpty()) {
-        return -1;
-    }
-
-    TypeOperation type = this.typeOperationDAO.getTypeOperation(codeTypeOperation);
-    if (type == null) {
-        return -1; // type d'opération inexistant
-    }
-
-    ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();
-    for (String matricule : matricules) {
-        Intervenant intervenant = this.intervenantDAO.getIntervenant(matricule);
-        if (intervenant == null) {
-            return -1; // matricule inexistant
->>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
         }
 
         ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();

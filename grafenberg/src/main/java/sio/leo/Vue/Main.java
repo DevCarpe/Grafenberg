@@ -66,7 +66,7 @@ public class Main {
 
         scanner.close();
     }
-
+    
     // Vérifie que la base de données est joignable avant d'afficher le menu
     private static boolean testerConnexion() {
         ConnexionDAO connexionDAO = new ConnexionDAO();
@@ -125,7 +125,7 @@ public class Main {
     }
 
 private static void afficherIntervenants(ArrayList<Intervenant> lesIntervenants) {
-        if (lesIntervenants.isEmpty()) { // <-- C'est bien "lesIntervenants" ici
+        if (lesIntervenants.isEmpty()) { 
             System.out.println("Aucun intervenant trouvé.");
             return;
         }
@@ -183,7 +183,6 @@ private static void afficherIntervenants(ArrayList<Intervenant> lesIntervenants)
             System.out.print("Code du type d'opération : ");
             int codeType = Integer.parseInt(scanner.nextLine().trim());
 
-<<<<<<< HEAD
             ArrayList<String> matricules = new ArrayList<String>();
 
             System.out.println("Matricules des intervenants (Tapez 'FIN' pour terminer) :");
@@ -203,17 +202,6 @@ private static void afficherIntervenants(ArrayList<Intervenant> lesIntervenants)
                 System.out.println("Échec de l'ajout de l'intervention.");
             } else {
                 System.out.println("Intervention " + numero + " ajoutée avec succès.");
-=======
-        ArrayList<String> matricules = new ArrayList<String>();
-
-        // écrire fin pour arreter d rentrer des matricules
-        System.out.println("Matricules des intervenants (fin pour terminer) :");
-        while (true) {
-            System.out.print("  Matricule : ");
-            String matricule = scanner.nextLine().trim();
-            if (matricule.equalsIgnoreCase("fin")) {
-                break;
->>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
             }
         } catch (ParseException e) {
             System.out.println("Date invalide.");
@@ -221,6 +209,16 @@ private static void afficherIntervenants(ArrayList<Intervenant> lesIntervenants)
     }
 
     private static void genererEtatPdf() {
+
+        /**
+        * Génère dynamiquement un état récapitulatif au format PDF (ex: intervention_1.pdf)
+        * à l'aide de la bibliothèque externe Apache PDFBox.
+        * Récupère les informations générales de l'intervention, la liste des intervenants associés
+        * ainsi que le coût de revient total calculé.
+        * 
+        * numIntervention Le numéro de l'intervention à exporter en PDF
+        */
+
         int numero = lireEntier("Numéro de l'intervention pour le PDF : ");
         Intervention intervention = interventionControleur.getInterventionComplete(numero);
 

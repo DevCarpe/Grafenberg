@@ -7,6 +7,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnexionDAO {
+   
+    /**
+ * Classe utilitaire fondamentale pour la gestion de la base de données MySQL.
+ * Elle centralise les paramètres de connexion JDBC (URL vers le serveur 192.168.5.120:3307/grafenberg02,
+ * identifiants) et fournit les méthodes pour ouvrir une connexion active, 
+ * préparer des requêtes sécurisées (PreparedStatement) ou exécuter des statements simples.
+ */
+
     
     private final String URL = "jdbc:mysql://192.168.5.120:3307/grafenberg02";
     private final String USER = "nour";
