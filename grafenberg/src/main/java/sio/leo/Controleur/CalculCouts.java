@@ -78,7 +78,7 @@ public class CalculCouts {
 
         TypeOperation type = intervention.getTypeOperation();
         if (type != null) {
-            chargesOperation = type.getCharges();
+            chargesOperation = type.getCharges() * intervention.getDuree();
             if (type.getBloc() != null) {
                 chargesBloc = type.getBloc().getCharges();
             }
