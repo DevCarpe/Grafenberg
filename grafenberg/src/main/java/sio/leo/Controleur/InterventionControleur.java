@@ -15,9 +15,15 @@ public class InterventionControleur {
     private TypeOperationDAO typeOperationDAO;
 
     public InterventionControleur() {
-        this.interventionDAO = new InterventionDAO();
-        this.intervenantDAO = new IntervenantDAO();
-        this.typeOperationDAO = new TypeOperationDAO(); 
+        this(new InterventionDAO(), new IntervenantDAO(), new TypeOperationDAO());
+    }
+
+    // Permet de fournir des DAO simules pour les tests sans base de donnees.
+    public InterventionControleur(InterventionDAO interventionDAO, IntervenantDAO intervenantDAO,
+            TypeOperationDAO typeOperationDAO) {
+        this.interventionDAO = interventionDAO;
+        this.intervenantDAO = intervenantDAO;
+        this.typeOperationDAO = typeOperationDAO;
     }
 
     // Récupère toutes les interventions depuis la base de données
@@ -43,29 +49,9 @@ public class InterventionControleur {
             return -1;
         }
 
-<<<<<<< HEAD
         TypeOperation type = this.typeOperationDAO.getTypeOperation(codeTypeOperation);
         if (type == null) {
             return -1; // type d'opération inexistant
-=======
-
-    public int ajouterIntervention(java.util.Date date, double duree, boolean nuit, int codeTypeOperation, ArrayList<String> matricules) {
-        //gestion de certaines erreurs possibles
-    if (date == null || duree <= 0 || matricules == null || matricules.isEmpty()) {
-        return -1;
-    }
-
-    TypeOperation type = this.typeOperationDAO.getTypeOperation(codeTypeOperation);
-    if (type == null) {
-        return -1; // type d'opération inexistant
-    }
-
-    ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();
-    for (String matricule : matricules) {
-        Intervenant intervenant = this.intervenantDAO.getIntervenant(matricule);
-        if (intervenant == null) {
-            return -1; // matricule inexistant
->>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
         }
 
         ArrayList<Intervenant> intervenants = new ArrayList<Intervenant>();
