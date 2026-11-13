@@ -65,7 +65,7 @@ public class IntervenantDAO {
                 rs.getDouble("CAT_COUTHORAIRE"));
 
         return new Intervenant(
-                Integer.parseInt(rs.getString("PER_MATRICULE").trim()),
+                rs.getString("PER_MATRICULE").trim(),
                 rs.getString("PER_NOM"),
                 categorie);
     }

@@ -135,7 +135,7 @@ public class Main {
         System.out.printf("%-12s %-20s %-10s %-12s%n", "Matricule", "Nom", "Catégorie", "Coût/heure");
         System.out.println("--------------------------------------------------------");
         for (Intervenant p : lesIntervenants) {
-            System.out.printf("%-12d %-20s %-10s %-12.2f%n",
+            System.out.printf("%-12s %-20s %-10s %-12.2f%n",
                     p.getMatricule(), p.getNom(),
                     p.getCategorie().getCode(), p.getCategorie().getCoutHoraire());
         }
