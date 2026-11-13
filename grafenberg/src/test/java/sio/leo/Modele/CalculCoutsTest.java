@@ -7,7 +7,6 @@ import sio.leo.Controleur.CalculCouts;
 
 // Test du calcul des couts (classe CalculCouts)
 // On reprend les exemples de l'annexe 1 du sujet
-// Pour lancer : Run dans VS Code ou avec java dans le terminal
 public class CalculCoutsTest {
 
     static int nbErreurs = 0;
