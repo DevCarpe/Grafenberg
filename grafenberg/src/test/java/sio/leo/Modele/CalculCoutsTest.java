@@ -40,10 +40,10 @@ public class CalculCoutsTest {
 
     // exemple 2 de l'annexe : mardi 02/06/2026, de jour, 2 heures, type 3 sur le bloc 1
     static void testJourSemaine() {
-        // les categories : 1 = A, 2 = B, 3 = C
-        Categorie catA = new Categorie(1, 24);
-        Categorie catB = new Categorie(2, 40);
-        Categorie catC = new Categorie(3, 73);
+        // les categories A, B et C avec leur cout horaire
+        Categorie catA = new Categorie("A", 24);
+        Categorie catB = new Categorie("B", 40);
+        Categorie catC = new Categorie("C", 73);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
         equipe.add(new Intervenant(38, "RIEUX", catB));
@@ -60,23 +60,21 @@ public class CalculCoutsTest {
         Intervention inter = new Intervention(equipe, 12477, Date.valueOf("2026-06-02"), false, type);
         inter.setDuree(2);
 
-        // les charges operation sont payees a l'heure
-        double chargesOperation = type.getCharges() * inter.getDuree();
 
         double coutPersonnel = CalculCouts.calculerCoutMainDoeuvre(inter, equipe);
-        double coutRevient = CalculCouts.calculerCoutDeRevient(inter, equipe, chargesOperation, bloc.getCharges());
+        double coutRevient = CalculCouts.calculerCoutDeRevient(inter);
 
         // (40 + 24 + 73 + 24) x 2h = 322
         verifier("jour semaine - cout du personnel", 322, coutPersonnel);
-        // 322 + 343 x 2 + 1524 = 2532
+        // 322 + 343 x 2 (charges operation payees a l heure) + 1524 = 2532
         verifier("jour semaine - cout de revient", 2532, coutRevient);
     }
 
     // exemple 1 de l'annexe : dimanche de nuit, 1 heure -> tarif x3
     static void testNuitDimanche() {
-        Categorie catA = new Categorie(1, 24);
-        Categorie catB = new Categorie(2, 40);
-        Categorie catC = new Categorie(3, 73);
+        Categorie catA = new Categorie("A", 24);
+        Categorie catB = new Categorie("B", 40);
+        Categorie catC = new Categorie("C", 73);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
         equipe.add(new Intervenant(26, "KNOCK", catC));
@@ -94,10 +92,9 @@ public class CalculCoutsTest {
         Intervention inter = new Intervention(equipe, 12461, Date.valueOf("2026-05-31"), true, type);
         inter.setDuree(1);
 
-        double chargesOperation = type.getCharges() * inter.getDuree();
 
         double coutPersonnel = CalculCouts.calculerCoutMainDoeuvre(inter, equipe);
-        double coutRevient = CalculCouts.calculerCoutDeRevient(inter, equipe, chargesOperation, bloc.getCharges());
+        double coutRevient = CalculCouts.calculerCoutDeRevient(inter);
 
         // 219 + 72 + 72 + 120 = 483
         verifier("dimanche nuit - cout du personnel", 483, coutPersonnel);
@@ -107,7 +104,7 @@ public class CalculCoutsTest {
 
     // un jeudi de nuit -> tarif x2
     static void testNuitSemaine() {
-        Categorie catA = new Categorie(1, 24);
+        Categorie catA = new Categorie("A", 24);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
         equipe.add(new Intervenant(3, "Personnel A03", catA));
@@ -121,7 +118,7 @@ public class CalculCoutsTest {
 
     // le 14 juillet est ferie -> tarif x3 meme de jour
     static void testJourFerie() {
-        Categorie catB = new Categorie(2, 40);
+        Categorie catB = new Categorie("B", 40);
 
         ArrayList<Intervenant> equipe = new ArrayList<>();
         equipe.add(new Intervenant(1, "Personnel B01", catB));
