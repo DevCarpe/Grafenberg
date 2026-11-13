@@ -24,10 +24,9 @@ public class TypeOperationDAO {
             pstmt.setInt(1, code);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    typeOperation = new TypeOperation();
-                    typeOperation.setCode(rs.getInt("TOP_CODE"));
-                    typeOperation.setCharges(rs.getInt("TOP_CHARGES"));
-                    typeOperation.setBloc(blocDAO.getBloc(rs.getInt("BLO_NUM")));
+                    typeOperation = new TypeOperation(rs.getInt("TOP_CODE"), 
+                    rs.getInt("TOP_CHARGES"),
+                    blocDAO.getBloc(rs.getInt("BLO_NUM")));
                 }
             }
         } catch (SQLException e) {
