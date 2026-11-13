@@ -6,7 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+/**
+ * Classe d'accès aux données (DAO) pour la gestion des interventions en base de données.
+ * Permet d'effectuer les opérations de lecture, le calcul du prochain numéro disponible
+ * et l'insertion sécurisée par transaction SQL.
+ */
 public class InterventionDAO {
     private ConnexionDAO connexionDAO;
     private TypeOperationDAO typeOperationDAO;
@@ -128,6 +132,8 @@ public int getProchainNumero() {
 }
 
 // Insère une intervention et ses intervenants. Retourne true si tout a réussi.
+
+// utilise le pricipe des transactions sql, pas d'auto commit, rollback si erreur
 public boolean insererIntervention(Intervention intervention) {
     String queryIntervention = "INSERT INTO INTERVENTION (INT_NUMERO, TOP_CODE, INT_DATE, INT_NUIT, INT_DUREE) "
                              + "VALUES (?, ?, ?, ?, ?)";

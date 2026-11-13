@@ -19,6 +19,15 @@ public class InterventionControleur {
     }
 
     // Permet de fournir des DAO simules pour les tests sans base de donnees.
+
+    /**
+     * Constructeur avec injection de dépendances.
+     * Permet de fournir des DAO simulés (mocks), notamment pour les tests unitaires sans base de données.
+     *
+     * @param interventionDAO  le DAO pour la gestion des interventions
+     * @param intervenantDAO   le DAO pour la gestion des intervenants
+     * @param typeOperationDAO le DAO pour la gestion des types d'opérations
+     */
     public InterventionControleur(InterventionDAO interventionDAO, IntervenantDAO intervenantDAO,
             TypeOperationDAO typeOperationDAO) {
         this.interventionDAO = interventionDAO;

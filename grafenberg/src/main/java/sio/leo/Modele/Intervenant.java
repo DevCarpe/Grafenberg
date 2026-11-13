@@ -15,11 +15,7 @@ public class Intervenant {
 
     
     public String getMatricule() {
-<<<<<<< HEAD
         return  matricule;
-=======
-        return matricule;
->>>>>>> 5ff9669a27969a4e1818af24553ada9040179507
     }
     public void setMatricule(String matricule) {
         this.matricule = matricule;
