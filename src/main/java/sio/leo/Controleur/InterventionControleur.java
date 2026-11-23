@@ -73,8 +73,7 @@ public class InterventionControleur {
         }
 
         int numero = this.interventionDAO.getProchainNumero();
-        Intervention intervention = new Intervention(intervenants, numero, date, nuit, type);
-        intervention.setDuree(duree);
+        Intervention intervention = new Intervention(intervenants, numero, date, nuit, type,duree);
 
         return this.interventionDAO.insererIntervention(intervention) ? numero : -1;
     }

@@ -77,6 +77,35 @@ public class InterventionDAO {
         }
         return intervention;
     }
+public void ajouterIntervention(Intervention intervention) throws SQLException {
+    String sqlInter = "INSERT INTO INTERVENTION (INT_NUMERO, INT_DATE, INT_NUIT, TOP_CODE, DUREE) VALUES (?, ?, ?, ?, ?)";
+    String sqlAffecter = "INSERT INTO INTERV_PERSONNEL (INT_NUMERO, PER_MATRICULE) VALUES (?, ?)";
+
+    try (Connection conn = connexionDAO.getConnection()) {
+        // 1. Insertion de l'intervention
+        try (PreparedStatement pstmt = conn.prepareStatement(sqlInter)) {
+            pstmt.setInt(1, intervention.getNumero());
+            pstmt.setDate(2, new java.sql.Date(intervention.getDate().getTime()));
+            pstmt.setString(3, intervention.isNuit() ? "O" : "N");
+            pstmt.setInt(4, intervention.getTypeOperation().getCode());
+            pstmt.setDouble(4, intervention.getDuree());
+            pstmt.executeUpdate();
+        }
+
+        // 2. Insertion des intervenants
+        if (intervention.getIntervenants() != null) {
+            try (PreparedStatement pstmtAff = conn.prepareStatement(sqlAffecter)) {
+                for (Intervenant inter : intervention.getIntervenants()) {
+                    pstmtAff.setInt(1, intervention.getNumero());
+                    pstmtAff.setString(2, inter.getMatricule());
+                    pstmtAff.executeUpdate();
+                }
+            }
+        }
+    }
+}
+
+
 
     // Construit une Intervention à partir de la ligne courante du ResultSet
     private Intervention creerIntervention(ResultSet rs) throws SQLException {
@@ -87,7 +116,8 @@ public class InterventionDAO {
                 rs.getInt("INT_NUMERO"),
                 rs.getDate("INT_DATE"),
                 convertirNuit(rs.getString("INT_NUIT")),
-                type);
+                type,
+        );
 
         intervention.setDuree(convertirDuree(rs.getString("INT_DUREE")));
         return intervention;

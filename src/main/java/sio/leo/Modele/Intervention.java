@@ -13,12 +13,13 @@ public class Intervention {
 
     
     public Intervention(ArrayList<Intervenant> intervenants, int numero, Date date, boolean nuit,
-            TypeOperation typeOperation) {
+            TypeOperation typeOperation, double duree) {
         Intervenants = intervenants;
         this.numero = numero;
         this.date = date;
         this.nuit = nuit;
         this.typeOperation = typeOperation;
+        this.duree = duree;
     }
 
 
