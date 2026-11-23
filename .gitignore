@@ -1,0 +1,8 @@
+# fichiers compiles (recrees a chaque compilation)
+target/
+
+# fichiers crees par macOS
+.DS_Store
+
+# fichiers de verrouillage de LibreOffice
+.~lock.*#
