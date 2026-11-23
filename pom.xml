@@ -12,7 +12,7 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-<!--        <failOnMissingWebXml>false</failOnMissingWebXml  aa>-->
+<!--        <failOnMissingWebXml>false</failOnMissingWebXml  aabb>-->
     </properties>
 
     <dependencies>
